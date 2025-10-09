@@ -74,9 +74,10 @@ app.put('/api/tasks/:id', async (req, res) => {
     res.json(updatedTask);
   } catch (error) {
     console.error(`[DB ERROR] Failed to update task with ID ${id}:`, error);
+    
     // Check for validation errors from Mongoose
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({ error: error.message });
+    if (error instanceof Error && (error as any).name === 'ValidationError') {
+      return res.status(400).json({ error: (error as any).message });
     }
     res.status(500).json({ error: 'Failed to update task' });
   }
