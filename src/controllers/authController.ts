@@ -14,6 +14,9 @@ const signupSchema = Joi.object({
 
 // Controller function for user signup
 export const signupUser = async (req: Request, res: Response) => {
+  // Wrapping the whole controller in try…catch ensures all unexpected runtime errors are properly handled.
+// Examples: Joi validation might throw if req.body is undefined, or jwt.sign could fail if JWT_SECRET is missing.
+
   try {
     // Validate request body using Joi
     const { error, value } = signupSchema.validate(req.body);
