@@ -4,7 +4,7 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
-import User from '../models/userModel';
+import User, { IUser } from '../models/userModel';
 
 // Joi schema for signup validation
 const signupSchema = Joi.object({
@@ -27,7 +27,7 @@ export const signupUser = async (req: Request, res: Response) => {
     const { email, password } = value;
 
     // Check if a user with the same email already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser: IUser | null = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists.' });
     }
