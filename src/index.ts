@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import taskRoutes from './routes/taskRoutes';
+import authRoutes from './routes/authRoutes';
+
 
 dotenv.config();
 
@@ -22,6 +24,9 @@ app.get('/', (req: Request, res: Response): void => {
 
 // --- Task Routes ---
 app.use('/api/tasks', taskRoutes);
+
+// --- Auth Routes ---
+app.use('/api/auth', authRoutes);
 
 // --- Server Startup ---
 const startServer = async (): Promise<void> => {
