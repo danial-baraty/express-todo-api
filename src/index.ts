@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import helmet from 'helmet';
 import taskRoutes from './routes/taskRoutes';
 import authRoutes from './routes/authRoutes';
 
@@ -20,6 +21,9 @@ app.use(cors());
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ limit: '10kb', extended: true }));
 
+// Set security-related HTTP headers
+app.use(helmet()); 
+
 
 // --- Base route ---
 app.get('/', (req: Request, res: Response): void => {
@@ -31,6 +35,32 @@ app.use('/api/tasks', taskRoutes);
 
 // --- Auth Routes ---
 app.use('/api/auth', authRoutes);
+
+
+// --- Validate required environment variables ---
+// --- Validate required environment variables ---
+const validateEnv = (): void => {
+    const requiredVars = ['MONGO_URI', 'JWT_SECRET', 'JWT_EXPIRES_IN', 'PORT', 'COOKIE_MAX_AGE_MS'];
+    const numericVars = ['PORT', 'COOKIE_MAX_AGE_MS'];
+
+    const missingVars = requiredVars.filter((key) => !process.env[key]);
+
+    if (missingVars.length > 0) {
+        console.error(`[ERROR] Missing environment variables: ${missingVars.join(', ')}`);
+        process.exit(1); // Stop the server startup
+    }
+
+    // NEW VALIDATION: Check if numeric variables are actually numbers
+    for (const key of numericVars) {
+        const value = process.env[key];
+        
+        if (isNaN(Number(value)) || Number(value) <= 0) {
+            console.error(`[ERROR] Environment variable ${key} must be a positive number, but found: ${value}`);
+            process.exit(1);
+        }
+    }
+};
+
 
 // --- Server Startup ---
 const startServer = async (): Promise<void> => {
@@ -56,5 +86,6 @@ const startServer = async (): Promise<void> => {
   }
 };
 
-// Start the server
+
+validateEnv();
 startServer();
