@@ -38,7 +38,6 @@ app.use('/api/auth', authRoutes);
 
 
 // --- Validate required environment variables ---
-// --- Validate required environment variables ---
 const validateEnv = (): void => {
     const requiredVars = ['MONGO_URI', 'JWT_SECRET', 'JWT_EXPIRES_IN', 'PORT', 'COOKIE_MAX_AGE_MS'];
     const numericVars = ['PORT', 'COOKIE_MAX_AGE_MS'];
