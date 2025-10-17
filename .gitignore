@@ -11,3 +11,5 @@ dist/
 
 # Exclude files created during runtime or debugging sessions.
 *.log
+
+test.ts
