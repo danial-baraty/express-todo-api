@@ -1,13 +1,13 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express, { Application, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import taskRoutes from './routes/taskRoutes';
 import authRoutes from './routes/authRoutes';
 
-
-dotenv.config();
 
 const PORT: number = Number(process.env.PORT) || 3000;
 const MONGO_URI: string | undefined = process.env.MONGO_URI;
